@@ -1,15 +1,13 @@
+<script setup>
+import TheAbout from "@/components/TheAbout.vue"
+</script>
+
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>No. Car. Gravel. &raquo; About</h1>
+    <TheAbout />
   </div>
 </template>
 
 <style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
 </style>
