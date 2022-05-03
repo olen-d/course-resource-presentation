@@ -1,9 +1,12 @@
 <script setup>
+import TheCourseCards from "@/components/TheCourseCards.vue"
 import TheWelcome from "@/components/TheWelcome.vue";
 </script>
 
 <template>
-  <main>
+  <div class="home">
+    <h1>No. Car. Gravel.</h1>
     <TheWelcome />
-  </main>
+    <TheCourseCards />
+  </div>
 </template>
