@@ -92,7 +92,7 @@ onMounted(async () => {
   <div class="course">
     <n-grid x-gap="12" y-gap="12" :cols="24">
       <n-grid-item :span="15">
-        <div class="green">
+        <div class="image-hero-course">
           <ImageHeroCourse v-if="heroImage" :imageURI="getImageURI(heroImage)" />
         </div>
         <SummaryCourse v-if="course.summaryHtml" label="ride report" :showLabel="true" :content="course.summaryHtml" />
@@ -164,10 +164,6 @@ onMounted(async () => {
   border-radius: 10px;
   width: auto;
   max-height: 800px;
-}
-
-.green {
-  background-color: #338833
 }
 
 .headline {
