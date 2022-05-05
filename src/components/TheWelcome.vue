@@ -24,7 +24,7 @@ onMounted(async () => {
 <template>
   <div class="the-welcome">
     <n-grid x-gap="24" y-gap="24" :cols="6" :item-responsive=true responsive="screen">
-      <n-grid-item span="xs:6 m:3 l:2">
+      <n-grid-item span="xs:6 s:3 l:2">
         <WelcomeItem v-if="!isLoading">
           <template #heading>{{ welcomeItems[0].title }}</template>
           <span v-html="welcomeItems[0].contentHtml"></span>
