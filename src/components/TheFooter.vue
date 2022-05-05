@@ -25,8 +25,8 @@ const linksSocial = [
 
 <template>
   <div class="footer">
-    <n-grid x-gap="12" y-gap="12" cols="1 m:16" responsive="screen">
-      <n-grid-item :offset="1" span="4">
+    <n-grid x-gap="12" y-gap="12" cols="16" :item-responsive=true responsive="screen">
+      <n-grid-item :offset="1" span="16 m:4">
         <ContentFooter
           :content="contentSite"
           label="No. Car. Gravel."
@@ -34,14 +34,14 @@ const linksSocial = [
           :showLabel="true"
         />
       </n-grid-item>
-      <n-grid-item :offset="1" span="4">
+      <n-grid-item :offset="1" span="16 m:4">
         <ContentFooter
           label="Follow"
           :links="linksSocial"
           :showLabel="true"
         />
       </n-grid-item>
-      <n-grid-item :offset="1" span="4">
+      <n-grid-item :offset="1" span="16 m:4">
         <ContentFooter
           label="Inspiration"
           :links="linksInspiration"
