@@ -44,7 +44,7 @@ onMounted(async () => {
 <template>
   <div class="the-route-cards">
     <n-grid x-gap="24" y-gap="24" :cols="12" :item-responsive=true responsive="screen">
-      <n-grid-item span="xs:12 s:6 m:4 xl:3" v-for="{ key, title, length, ascent, brief, uploadFilesImage = [], publishOn, city, state } in courses">
+      <n-grid-item span="xs:12 s:6 m:4 xl:3" v-for="{ key, title, length, ascent, brief, uploadFilesImage = [], publishOn, city, state } in courses" :key="key">
         <n-card :="$props" :title="title">
           <template #header-extra>
             {{ city }}, {{ state }}
