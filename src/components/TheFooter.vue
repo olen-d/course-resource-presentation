@@ -1,6 +1,31 @@
 <script setup>
+import { onMounted, ref } from 'vue'
+
 import ContentFooter from '@/components/ContentFooter.vue'
+
 import { NGrid, NGridItem } from "naive-ui"
+
+// Get the links
+const links = ref([])
+const linksSocial = ref([])
+
+onMounted(async () => {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/links`)
+  const result = await response.json()
+  const { status } = response
+
+  if (status === 200) {
+    const { data } = result
+
+    const filtered = data.map(element => {
+      return (({ _id: key, anchor, uri, icon, category, order }) => ({ key, anchor, uri, icon, category, order }))(element)
+    })
+    links.value.push(...filtered)
+
+    const filteredSocial = filtered.filter(element => { return element.category === 'socialMedia' })
+    linksSocial.value.push(...filteredSocial)
+  }
+})
 
 const contentSite = "Bringing the freshest quality gravel and mixed-surface routes to bicycle riders in North Carolina and the southeast since 2022."
 
@@ -13,13 +38,6 @@ const linksInspiration = [
 const linksSite = [
   { anchor: 'Contact', icon: 'fa-solid fa-envelope', URI: '#' },
   { anchor: 'GitHub', icon: 'fa-brands fa-github', URI: 'https://github.com/olen-d/course-resource-presentation' }
-]
-
-const linksSocial = [
-  { anchor: 'Facebook', icon: 'fa-brands fa-facebook', URI: '#' },
-  { anchor: 'Instagram', icon: 'fa-brands fa-instagram', URI: '#' },
-  { anchor: 'Twitter', icon: 'fa-brands fa-twitter', URI: '#' },
-  { anchor: 'YouTube', icon: 'fa-brands fa-youtube', URI: '#' },
 ]
 </script>
 

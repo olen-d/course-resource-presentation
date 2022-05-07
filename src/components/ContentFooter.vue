@@ -28,9 +28,9 @@ const props = defineProps({
       {{ content }}
     </div>
     <div v-if="props.links && props.links.length > 0" class="links">
-      <ul v-for="link in props.links" class="footer-links">
+      <ul v-for="link in props.links" class="footer-links" :key="link._id">
         <li>
-          <i v-if="link.icon" :class="link.icon"></i><a :href="link.URI">{{ link.anchor }}</a>
+          <i v-if="link.icon" :class="link.icon"></i><a :href="link.uri">{{ link.anchor }}</a>
         </li>
       </ul>
     </div>
