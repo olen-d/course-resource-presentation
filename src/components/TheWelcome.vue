@@ -30,6 +30,12 @@ onMounted(async () => {
           <span v-html="welcomeItems[0].contentHtml"></span>
         </WelcomeItem>
       </n-grid-item>
+      <n-grid-item span="xs:6 s:3 l:1">
+        <WelcomeItem v-if="!isLoading">
+          <template #heading>{{ welcomeItems[1].title }}</template>
+          <span v-html="welcomeItems[1].contentHtml"></span>
+        </WelcomeItem>
+      </n-grid-item>
     </n-grid>
   </div>
 </template>
