@@ -37,7 +37,7 @@ const props = defineProps({
   font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: 0.1rem;
-  text-align: center;
+  text-align: left;
   text-transform: uppercase;
   color: #ff6b25;
 }
@@ -45,4 +45,10 @@ const props = defineProps({
 .supporting-course {
   padding-top: 1.5rem;
 }
+
+@media (min-width: 1024px) {
+  .label {
+    text-align: center;
+  }
+} 
 </style>
