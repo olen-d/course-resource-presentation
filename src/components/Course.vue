@@ -96,7 +96,7 @@ onMounted(async () => {
           <ImageHeroCourse v-if="heroImage" :imageURI="getImageURI(heroImage)" />
         </div>
       </n-grid-item>
-      <n-grid-item offset="1" span="24 m:8">
+      <n-grid-item offset="m:1" span="24 m:8">
         <div class="headline">
           <h2>
             {{course.title}}
