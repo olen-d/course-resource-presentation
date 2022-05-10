@@ -30,8 +30,8 @@ const handleThumbnailClick = index => {
 
 <template>
   <div class="thumbnails-display">
-    <n-grid x-gap="12" y-gap="12" :cols="24">
-      <n-grid-item v-for="(file, index) in props.filesImage" :key="file" span="6">
+    <n-grid x-gap="12" y-gap="12" :cols="24" :item-responsive=true responsive="screen">
+      <n-grid-item v-for="(file, index) in props.filesImage" :key="file" span="12 s:8 m:6">
         <img :src="getThumbURI(file)" @click="handleThumbnailClick(index)" />
       </n-grid-item>
     </n-grid>

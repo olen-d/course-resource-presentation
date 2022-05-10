@@ -108,19 +108,29 @@ onMounted(async () => {
         <LocationCourse v-if="course.location" label="location" :location="course.location" :showLabel="true" />
         <n-grid x-gap="12" y-gap="12" cols="2 400:3 550:4" responsive="self">
           <n-grid-item>
-            <MetaCourse v-if="course.length" label="distance" :showLabel="true" :value="`${new Intl.NumberFormat().format(course.length)} miles`" />
+            <div class="meta--item-center">
+              <MetaCourse v-if="course.length" label="distance" :showLabel="true" :value="`${new Intl.NumberFormat().format(course.length)} miles`" />
+            </div>
           </n-grid-item>
           <n-grid-item>
-            <MetaCourse v-if="course.ascent" label="ascent" :showLabel="true" :value="`${new Intl.NumberFormat().format(course.ascent)} feet`" />
+            <div class="meta--item-center">
+              <MetaCourse v-if="course.ascent" label="climbing" :showLabel="true" :value="`${new Intl.NumberFormat().format(course.ascent)} feet`" />
+            </div>
           </n-grid-item>
           <n-grid-item>
-            <MetaCourse v-if="course.terrain" label="terrain" :showLabel="true" :value="course.terrain" />
+            <div class="meta--item-center">
+              <MetaCourse v-if="course.terrain" label="terrain" :showLabel="true" :value="course.terrain" />
+            </div>
           </n-grid-item>
           <n-grid-item>
-            <MetaCourse v-if="course.terrain" label="setting" :showLabel="true" :value="course.setting" />
+            <div class="meta--item-center">
+              <MetaCourse v-if="course.terrain" label="setting" :showLabel="true" :value="course.setting" />
+            </div>
           </n-grid-item>
           <n-grid-item>
-            <MetaCourse v-if="course.terrain" label="difficulty" :showLabel="true" :value="course.difficulty" />
+            <div class="meta--item-center">
+              <MetaCourse v-if="course.terrain" label="difficulty" :showLabel="true" :value="course.difficulty" />
+            </div>
           </n-grid-item>
         </n-grid>
       </n-grid-item>
@@ -131,7 +141,7 @@ onMounted(async () => {
         <MetaCourse v-if="course.userFullname" label="posted by" :showLabel="true" :value="course.userFullname" />
       </n-grid-item>
       <n-grid-item span="12 m:6">
-        <MetaCourse v-if="course.publishOn" label="published on" :showLabel="true" :value="`${new Intl.DateTimeFormat().format(new Date(course.publishOn))}`" />
+        <MetaCourse v-if="course.publishOn" label="published" :showLabel="true" :value="`${new Intl.DateTimeFormat().format(new Date(course.publishOn))}`" />
       </n-grid-item>
       <n-grid-item span="24">
         <ThumbnailsDisplay v-if="course.uploadFilesImage" :filesImage="course.uploadFilesImage" :thumbPath="thumbnailPath" :thumbPrefix="thumbnailPrefix" @emit-thumbnail-click="handleThumbnailClick($event)"/>
@@ -184,6 +194,11 @@ onMounted(async () => {
   text-transform: uppercase;
   color: #ff6b25;
 }
+
+.meta--item-center {
+  text-align: center;
+}
+
 
 .rating-happiness {
   margin-bottom: 1rem;
