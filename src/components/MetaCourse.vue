@@ -30,7 +30,6 @@ const props = defineProps({
 .meta-course {
   margin-bottom: 1rem;
 }
-
 .value {
   font-size: 1rem;
   text-transform: capitalize;

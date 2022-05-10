@@ -79,7 +79,7 @@ onMounted(async () => {
 <template>
   <n-modal :close-on-esc="true" v-model:show="showModal">
     <n-carousel :default-index="imageIndex" :show-arrow="true">
-      <div v-for="image in course.uploadFilesImage" class="carousel">
+      <div v-for="image in course.uploadFilesImage" :key="image" class="carousel">
         <div class="wrapper-carousel-img">
         <img
           class="carousel-img"
@@ -90,14 +90,13 @@ onMounted(async () => {
     </n-carousel>
   </n-modal>
   <div class="course">
-    <n-grid x-gap="12" y-gap="12" :cols="24">
-      <n-grid-item :span="15">
+    <n-grid x-gap="12" y-gap="12" :cols="24" :item-responsive=true responsive="screen">
+      <n-grid-item span="24 m:15">
         <div class="image-hero-course">
           <ImageHeroCourse v-if="heroImage" :imageURI="getImageURI(heroImage)" />
         </div>
-        <SummaryCourse v-if="course.summaryHtml" label="ride report" :showLabel="true" :content="course.summaryHtml" />
       </n-grid-item>
-      <n-grid-item offset="1" :span="8">
+      <n-grid-item offset="1" span="24 m:8">
         <div class="headline">
           <h2>
             {{course.title}}
@@ -107,7 +106,7 @@ onMounted(async () => {
           <n-rate v-if="course.happiness" color="#ff6b25" :readonly="true" :default-value="course.happiness" />
         </div>
         <LocationCourse v-if="course.location" label="location" :location="course.location" :showLabel="true" />
-        <n-grid x-gap="12" y-gap="12" cols="1 s:2 l:3" responsive="screen">
+        <n-grid x-gap="12" y-gap="12" cols="2 400:3 550:4" responsive="self">
           <n-grid-item>
             <MetaCourse v-if="course.length" label="distance" :showLabel="true" :value="`${new Intl.NumberFormat().format(course.length)} miles`" />
           </n-grid-item>
@@ -124,14 +123,14 @@ onMounted(async () => {
             <MetaCourse v-if="course.terrain" label="difficulty" :showLabel="true" :value="course.difficulty" />
           </n-grid-item>
         </n-grid>
-        <SupportingCourse v-if="course.facts" label="be prepared" :showLabel="true" :content="course.facts" />
-        <SupportingCourse v-if="course.parking" label="parking" :showLabel="true" :content="course.parking" />
-        <SupportingCourse v-if="course.creation" label="inspiration" :showLabel="true" :content="course.creation" />
       </n-grid-item>
-      <n-grid-item span="3">
+      <n-grid-item :span="24">
+        <SummaryCourse v-if="course.summaryHtml" label="ride report" :showLabel="true" :content="course.summaryHtml" />
+      </n-grid-item>
+      <n-grid-item span="12 m:6">
         <MetaCourse v-if="course.userFullname" label="posted by" :showLabel="true" :value="course.userFullname" />
       </n-grid-item>
-      <n-grid-item :offset="1" span="3">
+      <n-grid-item span="12 m:6">
         <MetaCourse v-if="course.publishOn" label="published on" :showLabel="true" :value="`${new Intl.DateTimeFormat().format(new Date(course.publishOn))}`" />
       </n-grid-item>
       <n-grid-item span="24">
@@ -139,6 +138,15 @@ onMounted(async () => {
       </n-grid-item>
       <n-grid-item span="24">
         <MapContainerRideWithGPS v-if="course.mapLink" :mapLink="course.mapLink" />
+      </n-grid-item>
+      <n-grid-item span="24 m:8">
+        <SupportingCourse v-if="course.facts" label="be prepared" :showLabel="true" :content="course.facts" />
+      </n-grid-item>
+      <n-grid-item span="24 m:8">
+        <SupportingCourse v-if="course.parking" label="parking" :showLabel="true" :content="course.parking" />
+      </n-grid-item>
+      <n-grid-item span="24 m:8">
+        <SupportingCourse v-if="course.creation" label="creation" :showLabel="true" :content="course.creation" />
       </n-grid-item>
     </n-grid>
   </div>
