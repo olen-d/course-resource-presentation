@@ -55,4 +55,12 @@ const props = defineProps({
 .supporting-course {
   padding-top: 1.5rem;
 }
+
+@media (min-width: 1024px) {
+  .content {
+    column-count: 2;
+    column-gap: 12px;
+    orphans: 2;
+  }
+} 
 </style>

@@ -11,7 +11,7 @@ const props = defineProps({
 <style scoped>
 img {
   width: 100%;
-  height: 600px;
+  height: auto;
   object-position: center;
   object-fit: cover;
 }
