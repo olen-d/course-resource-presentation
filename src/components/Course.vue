@@ -3,6 +3,7 @@ import ImageHeroCourse from '@/components/ImageHeroCourse.vue'
 import LocationCourse from '@/components/LocationCourse.vue'
 import MapContainerRideWithGPS from '@/components/MapContainerRideWithGPS.vue'
 import MetaCourse from '@/components/MetaCourse.vue'
+import Statistic from '@/components/Statistic.vue'
 import SummaryCourse from '@/components/SummaryCourse.vue'
 import SupportingCourse from '@/components/SupportingCourse.vue'
 import ThumbnailsDisplay from '@/components/ThumbnailsDisplay.vue'
@@ -133,6 +134,22 @@ onMounted(async () => {
             </div>
           </n-grid-item>
         </n-grid>
+        <div class="dog-chases">
+          <h3>
+            <i class="fa-solid fa-dog"></i> Dog Chases
+          </h3>
+          <n-grid x-gap="12" y-gap="12" cols="3">
+            <n-grid-item>
+              <Statistic v-if="course.dogStatistics" label="chases" :showLabel="true" :value="course.dogStatistics.totalChases" />
+            </n-grid-item>
+            <n-grid-item>
+              <Statistic v-if="course.dogStatistics" label="dogs" :showLabel="true" :value="course.dogStatistics.totalDogs" />
+            </n-grid-item>
+            <n-grid-item>
+              <Statistic v-if="course.dogStatistics" label="legs" :showLabel="true" :value="course.dogStatistics.totalLegs" />
+            </n-grid-item>
+          </n-grid>
+        </div>
       </n-grid-item>
       <n-grid-item :span="24">
         <SummaryCourse v-if="course.summaryHtml" label="ride report" :showLabel="true" :content="course.summaryHtml" />
@@ -182,6 +199,17 @@ onMounted(async () => {
   border-radius: 10px;
   width: auto;
   max-height: 800px;
+}
+
+.dog-chases {
+  text-align: center;
+}
+
+.dog-chases h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #ff6b25;
 }
 
 .headline {
