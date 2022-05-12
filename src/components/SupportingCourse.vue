@@ -4,9 +4,17 @@ const props = defineProps({
     type: String,
     required: true
   },
+    icon: {
+    type: String,
+    default: "fa-solid fa-arrow-right",
+  },
   label: {
     type: String,
     default: "label",
+  },
+  showIcon: {
+    type: Boolean,
+    default: false
   },
   showLabel: {
     type: Boolean,
@@ -17,8 +25,12 @@ const props = defineProps({
 
 <template>
   <div class="supporting-course">
-    <div class="label" v-if="showLabel">
-      {{ label }}
+    <div class="heading" v-if="showIcon || showLabel">
+      <i v-if="showIcon" :class="icon"></i>
+      <span v-if="showIcon && showLabel">&nbsp;</span>
+      <span class="label" v-if="showLabel">
+        {{ label }}
+      </span>
     </div>
     <div class="content">
       {{ content }}
@@ -31,7 +43,7 @@ const props = defineProps({
   font-size: 1.1rem;
 }
 
-.label {
+.heading {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   font-size: 1.5rem;
@@ -47,7 +59,7 @@ const props = defineProps({
 }
 
 @media (min-width: 1024px) {
-  .label {
+  .heading {
     text-align: center;
   }
 } 

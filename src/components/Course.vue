@@ -167,13 +167,13 @@ onMounted(async () => {
         <MapContainerRideWithGPS v-if="course.mapLink" :mapLink="course.mapLink" />
       </n-grid-item>
       <n-grid-item span="24 m:8">
-        <SupportingCourse v-if="course.facts" label="be prepared" :showLabel="true" :content="course.facts" />
+        <SupportingCourse v-if="course.facts" icon="fa-solid fa-circle-exclamation" label="be prepared" :showIcon="true" :showLabel="true" :content="course.facts" />
       </n-grid-item>
       <n-grid-item span="24 m:8">
-        <SupportingCourse v-if="course.parking" label="parking" :showLabel="true" :content="course.parking" />
+        <SupportingCourse v-if="course.parking" icon="fa-solid fa-square-parking" label="parking" :showIcon="true" :showLabel="true" :content="course.parking" />
       </n-grid-item>
       <n-grid-item span="24 m:8">
-        <SupportingCourse v-if="course.creation" label="creation" :showLabel="true" :content="course.creation" />
+        <SupportingCourse v-if="course.creation" icon="fa-solid fa-lightbulb" label="creation" :showIcon="true" :showLabel="true" :content="course.creation" />
       </n-grid-item>
     </n-grid>
   </div>
