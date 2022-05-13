@@ -1,4 +1,5 @@
 <script setup>
+import DisplayAddress from '@/components/DisplayAddress.vue'
 import ImageHeroCourse from '@/components/ImageHeroCourse.vue'
 import LocationCourse from '@/components/LocationCourse.vue'
 import MapContainerRideWithGPS from '@/components/MapContainerRideWithGPS.vue'
@@ -171,6 +172,15 @@ onMounted(async () => {
       </n-grid-item>
       <n-grid-item span="24 m:8">
         <SupportingCourse v-if="course.parking" icon="fa-solid fa-square-parking" label="parking" :showIcon="true" :showLabel="true" :content="course.parking" />
+        <DisplayAddress
+          v-if="course.location"
+          icon="fa-solid fa-location-dot"
+          label="Starting Point"
+          :location="course.location"
+          :showCoordinates="true"
+          :showIcon="false"
+          :showLabel="true"
+        />
       </n-grid-item>
       <n-grid-item span="24 m:8">
         <SupportingCourse v-if="course.creation" icon="fa-solid fa-lightbulb" label="creation" :showIcon="true" :showLabel="true" :content="course.creation" />
@@ -226,7 +236,6 @@ onMounted(async () => {
 .meta--item-center {
   text-align: center;
 }
-
 
 .rating-happiness {
   margin-bottom: 1rem;
