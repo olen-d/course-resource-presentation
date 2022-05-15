@@ -40,8 +40,10 @@ const props = defineProps({
         </span>
       </h3>
     </div>
-    {{ location.address }}<br />
-    {{ location.city }},&nbsp;{{ location.state }}&nbsp;{{ location.postcode }}
+    <div class="location-address">
+      {{ location.address }}<br />
+      {{ location.city }},&nbsp;{{ location.state }}&nbsp;{{ location.postcode }}
+    </div>
     <div class="coordinates">
       {{ location.latitude }}, {{ location.longitude }}
     </div>
@@ -60,9 +62,14 @@ const props = defineProps({
 }
 
 .heading h3 {
-  font-weight: 500;
-  text-transform: uppercase;
-  color: #ff6b25;
+  margin-bottom: 0rem;
+  font-weight: 400;
+  text-transform: capitalize;
+  /* color: #ff6b25; */
+}
+
+.location-address {
+  margin-top: 0.5rem;
 }
 
 @media (min-width: 1024px) {
