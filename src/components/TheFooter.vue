@@ -7,6 +7,7 @@ import { NGrid, NGridItem } from "naive-ui"
 
 // Get the links
 const links = ref([])
+const linksInspiration = ref([])
 const linksSocial = ref([])
 
 onMounted(async () => {
@@ -22,6 +23,9 @@ onMounted(async () => {
     })
     links.value.push(...filtered)
 
+    const filteredInspiration = filtered.filter(element => { return element.category === 'inspiration' })
+    linksInspiration.value.push(...filteredInspiration)
+
     const filteredSocial = filtered.filter(element => { return element.category === 'socialMedia' })
     linksSocial.value.push(...filteredSocial)
   }
@@ -29,11 +33,11 @@ onMounted(async () => {
 
 const contentSite = "Bringing the freshest quality gravel and mixed-surface routes to bicycle riders in North Carolina and the southeast since 2022."
 
-const linksInspiration = [
-  { anchor: 'Gravel Happens', icon: 'fa-solid fa-link', URI: 'http://www.gravelhappens.com/' },
-  { anchor: 'Rollin\' Appalachia', icon: 'fa-solid fa-link', URI: 'https://ridewithgps.com/ambassadors/247-rollin-appalachia' },
-  { anchor: 'Southeast Cycling Routes', icon: 'fa-solid fa-link', URI: 'https://southeastcyclingroutes.com/' }
-]
+// const linksInspiration = [
+//   { anchor: 'Gravel Happens', icon: 'fa-solid fa-link', URI: 'http://www.gravelhappens.com/' },
+//   { anchor: 'Rollin\' Appalachia', icon: 'fa-solid fa-link', URI: 'https://ridewithgps.com/ambassadors/247-rollin-appalachia' },
+//   { anchor: 'Southeast Cycling Routes', icon: 'fa-solid fa-link', URI: 'https://southeastcyclingroutes.com/' }
+// ]
 
 const linksSite = [
   { anchor: 'Contact', icon: 'fa-solid fa-envelope', URI: '#' },
