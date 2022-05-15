@@ -18,9 +18,11 @@ uri.value= encodeURI(`https://www.google.com/maps/search/?api=1&query=${props.la
 </script>
 
 <template>
-  <a :href="uri">
-    <i class="fa-solid fa-map-location-dot"></i> Show on Google Maps
-  </a>
+  <div class="location-course-show-google-maps">
+    <a :href="uri">
+      <i class="fa-solid fa-map-location-dot"></i> Show on Google Maps
+    </a>
+  </div>
 </template>
 
 <style scoped>
@@ -41,4 +43,9 @@ a:hover {
   color: #fff;
   background: rgba(255, 107, 37, 0.6);
 }
+
+.location-course-show-google-maps {
+  margin-left: -0.3rem;
+}
+
 </style>
