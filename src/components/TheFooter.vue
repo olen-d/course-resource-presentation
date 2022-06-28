@@ -40,9 +40,13 @@ const contentSite = "Bringing the freshest quality gravel and mixed-surface rout
 // ]
 
 const linksSite = [
-  { anchor: 'Contact', icon: 'fa-solid fa-envelope', URI: '#' },
-  { anchor: 'GitHub', icon: 'fa-brands fa-github', URI: 'https://github.com/olen-d/course-resource-presentation' }
+  { anchor: 'GitHub', icon: 'fa-brands fa-github', uri: 'https://github.com/olen-d/course-resource-presentation' }
 ]
+
+const routesSite = [
+  { anchor: 'Contact', icon: 'fa-solid fa-envelope', name: 'contact' },
+]
+
 </script>
 
 <template>
@@ -53,6 +57,7 @@ const linksSite = [
           :content="contentSite"
           label="No. Car. Gravel."
           :links="linksSite"
+          :routes="routesSite"
           :showLabel="true"
         />
       </n-grid-item>

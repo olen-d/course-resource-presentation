@@ -21,6 +21,20 @@ const router = createRouter({
       }
     },
     {
+      path: "/contact",
+      name: "contact",
+      component: () => import("../views/ContactView.vue"),
+      meta: {
+        title: 'Contact Us'
+      },
+      beforeEnter: (to, from) => {
+        const { path, meta: { title } } = from
+        localStorage.setItem('NCGR_ROUTE_PREV_PATH', path)
+        localStorage.setItem('NCGR_ROUTE_PREV_TITLE', title)
+        return true
+      }
+    },
+    {
       path: "/courses/:slug",
       component: () => import("../views/CourseView.vue"),
       meta: {
