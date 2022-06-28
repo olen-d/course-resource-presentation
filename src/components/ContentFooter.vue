@@ -1,4 +1,7 @@
 <script setup>
+import ListLinks from '@/components/ListLinks.vue'
+import ListRoutes from '@/components/ListRoutes.vue'
+
 const props = defineProps({
   content: {
     type: [Array, String],
@@ -9,6 +12,10 @@ const props = defineProps({
     default: "label",
   },
   links: {
+    type: Array,
+    default: null
+  },
+  routes: {
     type: Array,
     default: null
   },
@@ -27,13 +34,15 @@ const props = defineProps({
     <div v-if="props.content" class="content">
       {{ content }}
     </div>
-    <div v-if="props.links && props.links.length > 0" class="links">
+    <ListRoutes :routes="routes" />
+    <ListLinks :links="links" />
+    <!-- <div v-if="props.links && props.links.length > 0" class="links">
       <ul v-for="link in props.links" class="footer-links" :key="link._id">
         <li>
           <i v-if="link.icon" :class="link.icon"></i><a :href="link.uri">{{ link.anchor }}</a>
         </li>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
 
