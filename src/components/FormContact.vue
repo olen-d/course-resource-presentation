@@ -22,7 +22,7 @@ const formValues = ref([])
 const submitState = { isSubmitted: false }
 const shouldClearInput = ref(false)
 const showErrorMessageBox = ref(false)
-const showResult = ref(true)
+const showResult = ref(false)
 const showResultStatus = ref('')
 const showWarningMessageBox = ref(false)
 const warningDescription = ref('')
@@ -99,7 +99,6 @@ const handleSubmit = async () => {
       })
       const result = await response.json()
       const { status } = response
-      console.log(`Result\n${JSON.stringify(result, null, 2)}`)
 
       if (status === 200 && result?.accepted.length > 0) {
         showResult.value = true
