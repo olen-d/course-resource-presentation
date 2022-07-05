@@ -33,6 +33,14 @@ const props = defineProps({
   color: #ff6b25;
 }
 
+:deep(h4) {
+  font-weight: 500;
+  letter-spacing: 0.1rem;
+  text-align: left;
+  text-transform: uppercase;
+  color: #ff6b25;
+}
+
 .summary-course {
   margin-top: 4rem;
 }
