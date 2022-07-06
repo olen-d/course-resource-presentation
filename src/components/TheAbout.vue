@@ -46,5 +46,11 @@ onMounted(async () => {
       <template #details><span v-html="aboutItems[3].contentHtml"></span></template>
     </AboutItem>
   </n-grid-item>
+  <n-grid-item span="6 s:3 l:2">
+    <AboutItem v-if="!isLoading">
+      <template #heading>{{ aboutItems[4].title }}</template>
+      <template #details><span v-html="aboutItems[4].contentHtml"></span></template>
+    </AboutItem>
+  </n-grid-item>
 </n-grid>
 </template>
