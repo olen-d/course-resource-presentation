@@ -12,3 +12,9 @@ const route = useRoute()
     <Course :slug="route.params.slug" />
   </div>
 </template>
+
+<style scoped>
+.course-view {
+  overflow: hidden;
+}
+</style>
