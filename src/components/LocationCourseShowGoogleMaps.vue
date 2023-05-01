@@ -45,6 +45,7 @@ a:hover {
 }
 
 .location-course-show-google-maps {
+  margin-bottom: 0.3rem;
   margin-left: -0.3rem;
 }
 
