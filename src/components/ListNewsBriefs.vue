@@ -10,7 +10,7 @@ const newsItems = ref([])
 const windowWidth = ref(window.innerWidth)
 
 onMounted(async () => {
-  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/news`)
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/news/active`)
   const result = await response.json()
   const { status } = response
 
