@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import { useRouter } from 'vue-router'
 
@@ -25,6 +25,8 @@ const handleClick = (key) => {
 
 // Get the courses
 const courses = ref([])
+const orderBy = ref(-1)
+const sortBy = ref('publishOn')
 
 onMounted(async () => {
   const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/courses`)
@@ -45,12 +47,25 @@ onMounted(async () => {
     courses.value.push(...filtered)
   }
 })
+
+const sortedCourses = computed(() => {
+  const sorted = courses.value.toSorted((a, b) => {
+    if(sortBy.value === 'length') {
+      return a.length - b.length
+    } else if(sortBy.value === 'publishOn') {
+      const d1 = new Date(a.publishOn)
+      const d2 = new Date(b.publishOn)
+      return d1 - d2
+    }
+  })
+  return orderBy.value === -1 ? sorted.reverse() : sorted
+})
 </script>
 
 <template>
   <div class="the-route-cards">
     <n-grid x-gap="24" y-gap="24" :cols="12" :item-responsive=true responsive="screen">
-      <n-grid-item span="xs:12 s:6 m:4 xl:3" v-for="{ key, title, length, ascent, brief, uploadFilesCourse = [], uploadFilesImage = [], publishOn, city, state } in courses" :key="key">
+      <n-grid-item span="xs:12 s:6 m:4 xl:3" v-for="{ key, title, length, ascent, brief, uploadFilesCourse = [], uploadFilesImage = [], publishOn, city, state } in sortedCourses" :key="key">
         <n-card :="$props" :title="title">
           <template #header-extra>
             {{ city }}, {{ state }}
