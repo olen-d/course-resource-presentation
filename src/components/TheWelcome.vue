@@ -42,6 +42,6 @@ onMounted(async () => {
 
 <style scoped>
 .the-welcome {
-  margin-bottom: 5rem;
+  margin-bottom: 1rem;
 }
 </style>

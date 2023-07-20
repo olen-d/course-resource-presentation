@@ -3,6 +3,8 @@ import { computed, onMounted, ref } from 'vue'
 
 import { useRouter } from 'vue-router'
 
+import SelectInteractive from '@/components/form-fields/SelectInteractive.vue'
+
 import { NButton, NCard, NGrid, NGridItem, NSpace } from 'naive-ui'
 
 const router = useRouter()
@@ -23,10 +25,21 @@ const handleClick = (key) => {
   router.push({ path: `/courses/${key}` })
 }
 
-// Get the courses
 const courses = ref([])
 const orderBy = ref(-1)
 const sortBy = ref('publishOn')
+const options = [
+  {
+    label: 'Date Published',
+    value: 'publishOn',
+    description: ''
+  },
+  {
+    label: 'Distance',
+    value: 'length',
+    description: ''
+  }
+]
 
 onMounted(async () => {
   const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/courses`)
@@ -48,6 +61,11 @@ onMounted(async () => {
   }
 })
 
+const updateSortBy = event => {
+  const { inputValue } = event
+  sortBy.value = inputValue
+}
+
 const sortedCourses = computed(() => {
   const sorted = courses.value.toSorted((a, b) => {
     if(sortBy.value === 'length') {
@@ -63,6 +81,19 @@ const sortedCourses = computed(() => {
 </script>
 
 <template>
+  <div class="collate-bar">
+    <n-grid x-gap="24" y-gap="24" :cols="12" :item-responsive="true" responsive="screen">
+      <n-grid-item span="xs:12 s:6 m:4 xl:3">
+        <select-interactive
+          inputName="sortCourses"
+          placeholder="Sort Courses By..."
+          :labeltext="null"
+          :options="options"
+          @update-select-values="updateSortBy($event)"
+        />
+      </n-grid-item>
+    </n-grid>
+  </div>
   <div class="the-route-cards">
     <n-grid x-gap="24" y-gap="24" :cols="12" :item-responsive=true responsive="screen">
       <n-grid-item span="xs:12 s:6 m:4 xl:3" v-for="{ key, title, length, ascent, brief, uploadFilesCourse = [], uploadFilesImage = [], publishOn, city, state } in sortedCourses" :key="key">
