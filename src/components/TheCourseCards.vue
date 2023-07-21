@@ -30,6 +30,11 @@ const orderBy = ref(-1)
 const sortBy = ref('publishOn')
 const options = [
   {
+    label: 'Ascent',
+    value: 'ascent',
+    description: ''
+  },
+  {
     label: 'Date Published',
     value: 'publishOn',
     description: ''
@@ -68,9 +73,11 @@ const updateSortBy = event => {
 
 const sortedCourses = computed(() => {
   const sorted = courses.value.toSorted((a, b) => {
-    if(sortBy.value === 'length') {
+    if (sortBy.value === 'ascent') {
+      return a.ascent - b.ascent
+    } else if (sortBy.value === 'length') {
       return a.length - b.length
-    } else if(sortBy.value === 'publishOn') {
+    } else if (sortBy.value === 'publishOn') {
       const d1 = new Date(a.publishOn)
       const d2 = new Date(b.publishOn)
       return d1 - d2
@@ -78,6 +85,7 @@ const sortedCourses = computed(() => {
   })
   return orderBy.value === -1 ? sorted.reverse() : sorted
 })
+
 </script>
 
 <template>
