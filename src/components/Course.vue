@@ -126,12 +126,12 @@ onMounted(async () => {
           </n-grid-item>
           <n-grid-item>
             <div class="meta--item-center">
-              <MetaCourse v-if="course.terrain" label="setting" :showLabel="true" :value="course.setting" />
+              <MetaCourse v-if="course.setting" label="setting" :showLabel="true" :value="course.setting" />
             </div>
           </n-grid-item>
           <n-grid-item>
             <div class="meta--item-center">
-              <MetaCourse v-if="course.terrain" label="difficulty" :showLabel="true" :value="course.difficulty" />
+              <MetaCourse v-if="course.difficultyLevel?.length > 0" label="difficulty" :showLabel="true" :value="course?.difficultyLevel[0]?.eng" />
             </div>
           </n-grid-item>
         </n-grid>
