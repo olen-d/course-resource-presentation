@@ -40,6 +40,11 @@ const options = [
     description: ''
   },
   {
+    label: 'Difficulty',
+    value: 'difficulty',
+    description: ''
+  },
+  {
     label: 'Distance',
     value: 'length',
     description: ''
@@ -60,7 +65,7 @@ onMounted(async () => {
     thumbnailPrefix = prefixFilesThumbnails
 
     const filtered = data.map(element => {
-      return (({ slug: key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, location: { city, state } }) => ({ key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, city, state }))(element)
+      return (({ slug: key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, location: { city, state }, difficultyLevel }) => ({ key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, city, state, difficultyLevel }))(element)
     })
     courses.value.push(...filtered)
   }
@@ -75,6 +80,8 @@ const sortedCourses = computed(() => {
   const sorted = courses.value.toSorted((a, b) => {
     if (sortBy.value === 'ascent') {
       return a.ascent - b.ascent
+    } else if (sortBy.value === 'difficulty') {
+      return a.difficultyLevel[0].rating - b.difficultyLevel[0].rating
     } else if (sortBy.value === 'length') {
       return a.length - b.length
     } else if (sortBy.value === 'publishOn') {
