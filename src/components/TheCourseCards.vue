@@ -81,7 +81,24 @@ const sortedCourses = computed(() => {
     if (sortBy.value === 'ascent') {
       return a.ascent - b.ascent
     } else if (sortBy.value === 'difficulty') {
-      return a.difficultyLevel[0].rating - b.difficultyLevel[0].rating
+      const difficultyLevel1 = a.difficultyLevel[0].rating
+      const difficultyLevel2 = b.difficultyLevel[0].rating
+      if (difficultyLevel1 !== difficultyLevel2) {
+        return difficultyLevel1 - difficultyLevel2
+      } else {
+        // Tiebreaker is the average grade
+        const length1 = a.length * 5280
+        const length2 = b.length * 5280
+        const ascent1 = a.ascent
+        const ascent2 = b.ascent
+        const runSquared1 = Math.pow(length1, 2) - Math.pow(ascent1, 2)
+        const run1 = Math.sqrt(runSquared1)
+        const grade1 = ascent1 / run1 * 100
+        const runSquared2 = Math.pow(length2, 2) - Math.pow(ascent2, 2)
+        const run2 = Math.sqrt(runSquared2)
+        const grade2 = ascent2 / run2 * 100
+        return grade1 - grade2
+      }
     } else if (sortBy.value === 'length') {
       return a.length - b.length
     } else if (sortBy.value === 'publishOn') {
