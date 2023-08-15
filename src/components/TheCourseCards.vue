@@ -21,12 +21,23 @@ const getThumbnailURI = fileImage => {
   return `${import.meta.env.VITE_IMAGES_HOST}/${thumbnailPath}/${thumbnailPrefix}${fileImage}`
 }
 
-const handleClick = (key) => {
+const handleClick = key => {
   router.push({ path: `/courses/${key}` })
+}
+
+const toggleSortOrder = () => {
+  if (orderBy.value === 1) {
+    orderBy.value = -1
+    orderByIcon.value = 'fa fa-sort-amount-asc'
+  } else {
+    orderBy.value = 1
+    orderByIcon.value = 'fa fa-sort-amount-desc'
+  }
 }
 
 const courses = ref([])
 const orderBy = ref(-1)
+const orderByIcon = ref('fa fa-sort-amount-asc')
 const sortBy = ref('publishOn')
 const options = [
   {
@@ -115,7 +126,7 @@ const sortedCourses = computed(() => {
 <template>
   <div class="collate-bar">
     <n-grid x-gap="24" y-gap="24" :cols="12" :item-responsive="true" responsive="screen">
-      <n-grid-item span="xs:12 s:6 m:4 xl:3">
+      <n-grid-item span="xs:10 s:5 m:3 xl:2">
         <select-interactive
           inputName="sortCourses"
           placeholder="Sort Courses By..."
@@ -123,6 +134,13 @@ const sortedCourses = computed(() => {
           :options="options"
           @update-select-values="updateSortBy($event)"
         />
+      </n-grid-item>
+      <n-grid-item>
+        <div class="sort-order">
+          <n-button text @click="toggleSortOrder" style="font-size: 24px" color="#aaaaaa">
+            <i :class="orderByIcon"></i>
+          </n-button>
+        </div>
       </n-grid-item>
     </n-grid>
   </div>
@@ -165,5 +183,8 @@ const sortedCourses = computed(() => {
 <style scoped>
 .n-card {
   width: 100%;
+}
+.sort-order {
+  padding-top: 30px;
 }
 </style>
