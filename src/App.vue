@@ -1,10 +1,14 @@
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "@/components/HelloWorld.vue";
-import TheFooter from "@/components/TheFooter.vue"
-import TheNavBar from "@/components/TheNavBar.vue";
+import HelloWorld from '@/components/HelloWorld.vue'
+import TheFooter from '@/components/TheFooter.vue'
+import TheNavBar from '@/components/TheNavBar.vue'
+
+import { useSessionRecord } from '@/composables/useSessionRecord.js'
 
 import { NLayout, NLayoutContent, NLayoutFooter, NLayoutHeader } from 'naive-ui'
+
+useSessionRecord()
+
 </script>
 
 <template>
