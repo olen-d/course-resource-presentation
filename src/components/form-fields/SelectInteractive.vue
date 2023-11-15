@@ -25,10 +25,15 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: 'Select an option...'
+  },
+  prevValue: {
+    type: String,
+    default: 'nothing'
   }
 })
 
 const inputValue = ref(null)
+const prevInputValue = ref(null)
 
 onMounted(() => {
   if (props.initialValue) {
@@ -48,6 +53,11 @@ const handleUpdateValue = (value, option) => {
 
 watch(() => props.initialValue, (newInitialValue, prevInitialValue) => {
   inputValue.value = newInitialValue
+  emitChange(props.inputName, inputValue.value)
+})
+
+watch(() => props.prevValue, (newPrevValue, prevPrevValue) => {
+  inputValue.value = newPrevValue
   emitChange(props.inputName, inputValue.value)
 })
 

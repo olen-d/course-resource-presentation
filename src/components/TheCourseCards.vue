@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 
 import SelectInteractive from '@/components/form-fields/SelectInteractive.vue'
 
-import { NButton, NCard, NGrid, NGridItem, NSpace } from 'naive-ui'
+import { NButton, NCard, NGrid, NGridItem, NModal, NSpace } from 'naive-ui'
 
 const router = useRouter()
 
@@ -38,7 +38,12 @@ const toggleSortOrder = () => {
 const courses = ref([])
 const orderBy = ref(-1)
 const orderByIcon = ref('fa fa-sort-amount-asc')
-const sortBy = ref('publishOn')
+const showModalLocation = ref(false)
+const sortBy = ref(null)
+const sortByPrev = ref('nothing')
+const userLatitude = ref(0)
+const userLongitude = ref(0)
+
 const options = [
   {
     label: 'Ascent',
@@ -56,8 +61,13 @@ const options = [
     description: ''
   },
   {
-    label: 'Distance',
+    label: 'Length',
     value: 'length',
+    description: ''
+  },
+  {
+    label: 'Distance to Me',
+    value: 'proximity',
     description: ''
   }
 ]
@@ -76,15 +86,96 @@ onMounted(async () => {
     thumbnailPrefix = prefixFilesThumbnails
 
     const filtered = data.map(element => {
-      return (({ slug: key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, location: { city, state }, difficultyLevel }) => ({ key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, city, state, difficultyLevel }))(element)
+      return (({ slug: key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, location: { latitude, longitude, city, state }, difficultyLevel }) => ({ key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, latitude, longitude, city, state, difficultyLevel }))(element)
     })
     courses.value.push(...filtered)
   }
 })
 
-const updateSortBy = event => {
+const handleSortSelected = async event => {
   const { inputValue } = event
+  if (inputValue === 'proximity') {
+    const result = await navigator.permissions.query({ name: 'geolocation' })
+    const { state } = result
+    if (state === 'granted') {
+      updateSortBy(inputValue)
+    } else {
+      showModalLocation.value = true
+    }
+  } else {
+    updateSortBy(inputValue)
+  }
+}
+
+const updateSortBy = inputValue => {
   sortBy.value = inputValue
+}
+
+const updateSortByPrev = inputValue => {
+  sortByPrev.value = inputValue
+}
+
+const submitLocation = async () => {
+  showModalLocation.value = false
+  const location = await getLocation()
+  const { latitude, longitude } = location
+  userLatitude.value = latitude
+  userLongitude.value = longitude
+  updateSortBy('proximity')
+}
+
+const cancelLocation = () => {
+  updateSortByPrev(sortBy.value)
+  showModalLocation.value = false
+}
+
+const getLocation = () => {
+  return new Promise((resolve, reject) => {
+    if ('geolocation' in navigator) {
+      function success (position) {
+        const { coords: { latitude, longitude}, } = position
+        resolve({
+          latitude,
+          longitude
+        })
+      }
+
+      function error () {
+        reject({
+          error: 'Forbidden. User did not allow location access.'
+        });
+      }
+      navigator.geolocation.getCurrentPosition(success, error)
+    } else {
+      reject({
+        error: 'Not Found. Browser does not support location access.'
+      })
+    }
+  })
+}
+
+const degreesToRadians = degrees => {
+  const radians = (degrees * Math.PI)/180
+  return radians
+}
+
+const getDistance = (startCoords, endCoords) => {
+  const { latitude: startLatDegrees, longitude: startLonDegrees } = startCoords
+  const { latitude: endLatDegrees, longitude: endLonDegrees } = endCoords
+
+  const startLatRadians = degreesToRadians(startLatDegrees)
+  const startLonRadians = degreesToRadians(startLonDegrees)
+  const endLatRadians = degreesToRadians(endLatDegrees)
+  const endLonRadians = degreesToRadians(endLonDegrees)
+
+  const radius = 6571 // Radius of Earth in KM
+
+  // Haversine equation
+  const distance = Math.acos(Math.sin(startLatRadians) * Math.sin(endLatRadians) +
+  Math.cos(startLatRadians) * Math.cos(endLatRadians) *
+  Math.cos(startLonRadians - endLonRadians)) * radius
+
+  return distance
 }
 
 const sortedCourses = computed(() => {
@@ -112,7 +203,12 @@ const sortedCourses = computed(() => {
       }
     } else if (sortBy.value === 'length') {
       return a.length - b.length
-    } else if (sortBy.value === 'publishOn') {
+    } else if (sortBy.value === 'proximity') {
+      const userLocation = { latitude: userLatitude.value, longitude: userLongitude.value }
+      const distance1 = getDistance( userLocation, { latitude: a.latitude, longitude: a.longitude })
+      const distance2 = getDistance( userLocation, { latitude: b.latitude, longitude: b.longitude })
+      return distance2 - distance1
+    } else if (sortBy.value === 'publishOn' || sortBy.value === null) {
       const d1 = new Date(a.publishOn)
       const d2 = new Date(b.publishOn)
       return d1 - d2
@@ -124,6 +220,16 @@ const sortedCourses = computed(() => {
 </script>
 
 <template>
+  <n-modal
+    v-model:show="showModalLocation"
+    preset="dialog"
+    title="Permission to Access Location"
+    content="To show courses by their distance to you, we need permission to access your location. To grant it, please click the continue button and then allow www.nocargravel.cc to access your location in the next dialog."
+    positive-text="Continue"
+    negative-text="Cancel"
+    @positive-click="submitLocation"
+    @negative-click="cancelLocation"
+  />
   <div class="collate-bar">
     <n-grid x-gap="24" y-gap="24" :cols="12" :item-responsive="true" responsive="screen">
       <n-grid-item span="xs:10 s:5 m:3 xl:2">
@@ -132,7 +238,8 @@ const sortedCourses = computed(() => {
           placeholder="Sort Courses By..."
           :labeltext="null"
           :options="options"
-          @update-select-values="updateSortBy($event)"
+          :prevValue="sortByPrev"
+          @update-select-values="handleSortSelected($event)"
         />
       </n-grid-item>
       <n-grid-item>
