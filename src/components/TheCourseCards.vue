@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 import SelectInteractive from '@/components/form-fields/SelectInteractive.vue'
 
 import { NButton, NCard, NGrid, NGridItem, NModal, NSpace } from 'naive-ui'
+import { ConstructionFilled } from '@vicons/material';
 
 const router = useRouter()
 
@@ -66,6 +67,11 @@ const options = [
     description: ''
   },
   {
+    label: 'Popularity',
+    value: 'popularity',
+    description: ''
+  },
+  {
     label: 'Distance to Me',
     value: 'proximity',
     description: ''
@@ -73,6 +79,24 @@ const options = [
 ]
 
 onMounted(async () => {
+  const getPopularCoursesSlugs = async () => {
+    const popularResponse = await fetch(`${import.meta.env.VITE_ANALYTICS_API_BASE_URL}/v1/pages/routes/total-time-views`, {
+      keepalive: true,
+      method: 'GET',
+      headers: {
+        'api-key': import.meta.env.VITE_ANALYTICS_API_KEY
+      }
+    })
+    const { status: popularStatus } = popularResponse
+    if (popularStatus === 200) {
+      const popularResult = await popularResponse.json()
+      const { data } = popularResult
+      const popularCourses = data.filter(element => { return element.route.includes('/courses/') })
+      const popularCoursesSlugs = popularCourses.map(element => { return { 'slug': element.route.slice(9), 'total_time': element.total_time, 'total_views': element.total_views } })
+      return popularCoursesSlugs
+    }
+  }
+
   const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/courses`)
   const result = await response.json()
   const { status } = response
@@ -85,8 +109,15 @@ onMounted(async () => {
     thumbnailPath = pathFilesThumbnails
     thumbnailPrefix = prefixFilesThumbnails
 
+    const popularCoursesSlugs = await getPopularCoursesSlugs()
+
+    const returnViews = slug => {
+      const index = popularCoursesSlugs.findIndex(element => element.slug === slug)
+      return index === -1 ? 0 : popularCoursesSlugs[index].total_views
+
+    }
     const filtered = data.map(element => {
-      return (({ slug: key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, location: { latitude, longitude, city, state }, difficultyLevel }) => ({ key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, latitude, longitude, city, state, difficultyLevel }))(element)
+      return (({ slug: key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, location: { latitude, longitude, city, state }, difficultyLevel }) => ({ key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, latitude, longitude, city, state, difficultyLevel, totalViews: returnViews(key) }))(element)
     })
     courses.value.push(...filtered)
   }
@@ -208,6 +239,8 @@ const sortedCourses = computed(() => {
       const distance1 = getDistance( userLocation, { latitude: a.latitude, longitude: a.longitude })
       const distance2 = getDistance( userLocation, { latitude: b.latitude, longitude: b.longitude })
       return distance2 - distance1
+    } else if (sortBy.value === 'popularity') {
+      return a.totalViews - b.totalViews
     } else if (sortBy.value === 'publishOn' || sortBy.value === null) {
       const d1 = new Date(a.publishOn)
       const d2 = new Date(b.publishOn)
