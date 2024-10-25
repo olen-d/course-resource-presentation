@@ -5,6 +5,7 @@ export function useSessionRecord () {
 
   const sessionId = crypto.randomUUID()
   const sessionStartTime = Date.now()
+  const referrer = document.referrer
   const device = null
   const userAgent = window.navigator.userAgent
   const language = window.navigator.language
@@ -31,6 +32,7 @@ export function useSessionRecord () {
             language,
             latency,
             pageLoad,
+            referrer,
             sessionId,
             sessionStartTime,
             timezone,
