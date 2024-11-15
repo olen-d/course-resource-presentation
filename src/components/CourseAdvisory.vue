@@ -19,7 +19,7 @@ const props = defineProps({
     <h3>
       <i :class="icon"></i> Closures
     </h3>
-    <div class="course-advisory-information" v-for="{_id, facility, from, to, condition, startDate, endDate, isPublished} in advisories" :key=_id>
+    <div class="course-advisory-information" v-for="{_id, facility, from, to, condition } in advisories" :key=_id>
       <div class="course-advisory-information-headline">
         {{ facility }}
         {{ to ? ' from ' : 'at' }}

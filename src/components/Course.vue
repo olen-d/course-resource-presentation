@@ -147,7 +147,7 @@ onMounted(async () => {
             </div>
           </n-grid-item>
         </n-grid>
-        <div>
+        <div v-if="advisories?.length > 0">
           <CourseAdvisory :advisories="advisories" icon="fa-solid fa-triangle-exclamation" />
         </div>
         <div class="dog-chases">
