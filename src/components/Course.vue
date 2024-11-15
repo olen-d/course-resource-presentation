@@ -1,4 +1,5 @@
 <script setup>
+import CourseAdvisory from '@/components/CourseAdvisory.vue'
 import DisplayAddress from '@/components/DisplayAddress.vue'
 import ImageHeroCourse from '@/components/ImageHeroCourse.vue'
 import LocationCourse from '@/components/LocationCourse.vue'
@@ -39,6 +40,7 @@ const handleThumbnailClick = event => {
   showModal.value = true
 }
 
+const advisories = ref([])
 const course = ref({})
 const imageIndex = ref(0)
 const heroImage = ref('')
@@ -72,6 +74,16 @@ onMounted(async () => {
     thumbnailPrefix.value = prefixFilesThumbnails
   }
   heroImage.value = course.value.uploadFilesImage[0]
+
+  // Get any advisories
+  const advisoryResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/advisories/advisory/published/route/${course.value._id}`)
+  const advisoryResult = await advisoryResponse.json()
+
+  const { status: advisoryStatus } = advisoryResult 
+  if (advisoryStatus === 'ok') {
+    const { data: advisoryData } = advisoryResult
+    advisories.value = advisoryData
+  }
 
   // Add the course title to the page title
   document.title = `${course.value.title} \u00ab ${document.title}`
@@ -135,6 +147,9 @@ onMounted(async () => {
             </div>
           </n-grid-item>
         </n-grid>
+        <div>
+          <CourseAdvisory :advisories="advisories" icon="fa-solid fa-triangle-exclamation" />
+        </div>
         <div class="dog-chases">
           <h3>
             <i class="fa-solid fa-dog"></i> Dog Chases
