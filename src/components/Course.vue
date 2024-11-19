@@ -76,7 +76,7 @@ onMounted(async () => {
   heroImage.value = course.value.uploadFilesImage[0]
 
   // Get any advisories
-  const advisoryResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/advisories/advisory/published/route/${course.value._id}`)
+  const advisoryResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/advisories/advisory/published/course/${course.value._id}`)
   const advisoryResult = await advisoryResponse.json()
 
   const { status: advisoryStatus } = advisoryResult 
