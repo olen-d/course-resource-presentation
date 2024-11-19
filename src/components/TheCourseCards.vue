@@ -36,6 +36,7 @@ const toggleSortOrder = () => {
   }
 }
 
+const advisories = ref([])
 const courses = ref([])
 const orderBy = ref(-1)
 const orderByIcon = ref('fa fa-sort-amount-asc')
@@ -97,6 +98,15 @@ onMounted(async () => {
     }
   }
 
+  const advisoriesResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/advisories/published/courses/ids`)
+  const advisoriesResult = await advisoriesResponse.json()
+  const { status: advisoriesStatus } = advisoriesResponse
+
+  if (advisoriesStatus === 200) {
+    const { data } = advisoriesResult
+    advisories.value = data
+  }
+
   const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/v1/courses`)
   const result = await response.json()
   const { status } = response
@@ -111,13 +121,17 @@ onMounted(async () => {
 
     const popularCoursesSlugs = await getPopularCoursesSlugs()
 
+    const returnAdvisories = _id => {
+      const index = advisories.value.findIndex(element => element === _id)
+      return index !== -1
+    }
+
     const returnViews = slug => {
       const index = popularCoursesSlugs.findIndex(element => element.slug === slug)
       return index === -1 ? 0 : popularCoursesSlugs[index].total_views
-
     }
     const filtered = data.map(element => {
-      return (({ slug: key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, location: { latitude, longitude, city, state }, difficultyLevel }) => ({ key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, latitude, longitude, city, state, difficultyLevel, totalViews: returnViews(key) }))(element)
+      return (({ _id, slug: key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, location: { latitude, longitude, city, state }, difficultyLevel }) => ({ key, title, length, ascent, brief, uploadFilesCourse, uploadFilesImage, publishOn, latitude, longitude, city, state, difficultyLevel, totalViews: returnViews(key), hasAdvisory: returnAdvisories(_id) }))(element)
     })
     courses.value.push(...filtered)
   }
@@ -286,7 +300,7 @@ const sortedCourses = computed(() => {
   </div>
   <div class="the-route-cards">
     <n-grid x-gap="24" y-gap="24" :cols="12" :item-responsive=true responsive="screen">
-      <n-grid-item span="xs:12 s:6 m:4 xl:3" v-for="{ key, title, length, ascent, brief, uploadFilesCourse = [], uploadFilesImage = [], publishOn, city, state } in sortedCourses" :key="key">
+      <n-grid-item span="xs:12 s:6 m:4 xl:3" v-for="{ key, title, length, ascent, brief, uploadFilesCourse = [], uploadFilesImage = [], publishOn, city, state, hasAdvisory } in sortedCourses" :key="key">
         <n-card :="$props" :title="title">
           <template #header-extra>
             {{ city }}, {{ state }}
@@ -294,6 +308,7 @@ const sortedCourses = computed(() => {
           <template #cover>
             <img :src="getThumbnailURI(uploadFilesImage[0])">
           </template>
+          <div v-if="hasAdvisory" class="advisory"><i class="fa-solid fa-circle-exclamation"></i> Road Closures</div>
           {{ brief }}
           <template #footer>
             Length: {{ new Intl.NumberFormat().format(length) }} miles<br />
@@ -321,6 +336,11 @@ const sortedCourses = computed(() => {
 </template>
 
 <style scoped>
+.advisory {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #ff6b25;
+}
 .n-card {
   width: 100%;
 }
