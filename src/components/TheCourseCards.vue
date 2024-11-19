@@ -332,9 +332,6 @@ const sortedCourses = computed(() => {
         </n-card>
       </n-grid-item>
     </n-grid>
-<pre>
-{{ sortedCourses }}
-</pre>
   </div>
 </template>
 
