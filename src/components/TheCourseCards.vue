@@ -46,7 +46,7 @@ const sortByPrev = ref('nothing')
 const userLatitude = ref(0)
 const userLongitude = ref(0)
 
-const options = [
+const options = ref([
   {
     label: 'Ascent',
     value: 'ascent',
@@ -77,23 +77,30 @@ const options = [
     value: 'proximity',
     description: ''
   }
-]
+])
 
 onMounted(async () => {
   const getPopularCoursesSlugs = async () => {
-    const popularResponse = await fetch(`${import.meta.env.VITE_ANALYTICS_API_BASE_URL}/v1/pages/routes/total-time-views`, {
+    try {
+      const popularResponse = await fetch(`${import.meta.env.VITE_ANALYTICS_API_BASE_URL}/v1/pages/routes/total-time-views`, {
       keepalive: true,
       method: 'GET',
       headers: {
         'api-key': import.meta.env.VITE_ANALYTICS_API_KEY
       }
     })
-    const { status: popularStatus } = popularResponse
-    if (popularStatus === 200) {
-      const popularResult = await popularResponse.json()
-      const { data } = popularResult
-      const popularCourses = data.filter(element => { return element.route.includes('/courses/') })
-      const popularCoursesSlugs = popularCourses.map(element => { return { 'slug': element.route.slice(9), 'total_time': element.total_time, 'total_views': element.total_views } })
+      const { status: popularStatus } = popularResponse
+      if (popularStatus === 200) {
+        const popularResult = await popularResponse.json()
+        const { data } = popularResult
+        const popularCourses = data.filter(element => { return element.route.includes('/courses/') })
+        const popularCoursesSlugs = popularCourses.map(element => { return { 'slug': element.route.slice(9), 'total_time': element.total_time, 'total_views': element.total_views } })
+        return popularCoursesSlugs
+      }
+    } catch {
+      const popularCoursesSlugs = []
+      const popularityIndex = options.value.findIndex(element => element.value === 'popularity')
+      options.value.splice(popularityIndex, 1) // Mutates the options array
       return popularCoursesSlugs
     }
   }
