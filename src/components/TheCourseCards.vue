@@ -81,6 +81,12 @@ const options = ref([
 
 onMounted(async () => {
   const getPopularCoursesSlugs = async () => {
+    const popularCourseFail = () => {
+      const popularCoursesSlugs = []
+      const popularityIndex = options.value.findIndex(element => element.value === 'popularity')
+      options.value.splice(popularityIndex, 1) // Mutates the options array
+      return popularCoursesSlugs
+    }
     try {
       const popularResponse = await fetch(`${import.meta.env.VITE_ANALYTICS_API_BASE_URL}/v1/pages/routes/total-time-views`, {
       keepalive: true,
@@ -96,12 +102,11 @@ onMounted(async () => {
         const popularCourses = data.filter(element => { return element.route.includes('/courses/') })
         const popularCoursesSlugs = popularCourses.map(element => { return { 'slug': element.route.slice(9), 'total_time': element.total_time, 'total_views': element.total_views } })
         return popularCoursesSlugs
+      } else {
+        return popularCourseFail()
       }
     } catch {
-      const popularCoursesSlugs = []
-      const popularityIndex = options.value.findIndex(element => element.value === 'popularity')
-      options.value.splice(popularityIndex, 1) // Mutates the options array
-      return popularCoursesSlugs
+      return popularCourseFail()
     }
   }
 
