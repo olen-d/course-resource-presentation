@@ -83,7 +83,8 @@ const handleSubmit = async () => {
     const toAddress = 'contact@nocargravel.cc'
 
     const mailOptions = {
-      from: fromAddress,
+      from: toAddress,
+      replyTo: fromAddress,
       to: toAddress,
       subject,
       text
@@ -105,6 +106,7 @@ const handleSubmit = async () => {
         showResultStatus.value = 'success'
       } else {
         console.log("REJECTED!")
+        console.log(JSON.stringify(result, null, 4))
       }
       // TODO: Finish the error handling to address all cases
       if (status === 400 && result.message) {
