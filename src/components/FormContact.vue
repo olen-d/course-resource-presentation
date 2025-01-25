@@ -19,11 +19,14 @@ const errorDescription = ref('')
 const errorTitle = ref('')
 const fromTitle = ref('')
 const formValues = ref([])
+const resultDescription = ref(null)
+const resultSecondaryContent = ref(null)
+const resultStatus = ref(null)
+const resultTitle = ref(null)
 const submitState = { isSubmitted: false }
 const shouldClearInput = ref(false)
 const showErrorMessageBox = ref(false)
 const showResult = ref(false)
-const showResultStatus = ref('')
 const showWarningMessageBox = ref(false)
 const warningDescription = ref('')
 const warningTitle = ref("")
@@ -82,6 +85,7 @@ const handleSubmit = async () => {
     const text = `${messageStripped} \n\n Contact Name: ${data['name']}\nContact Email: ${fromAddress}`;
     const toAddress = 'contact@nocargravel.cc'
 
+    // The from address matches the to address to avoid the error: Sender address rejected: not owned by usernot
     const mailOptions = {
       from: toAddress,
       replyTo: fromAddress,
@@ -102,11 +106,19 @@ const handleSubmit = async () => {
       const { status } = response
 
       if (status === 200 && result?.accepted.length > 0) {
+        resultDescription.value = 'Thank you for contacting us. Your message was delivered. If you provided an email address, you can expect a response within 48 hours.'
+        resultSecondaryContent.value = 'Send Another Message'
+        resultStatus.value = 'success'
+        resultTitle.value = 'Message Sent'
         showResult.value = true
-        showResultStatus.value = 'success'
+        shouldClearInput.value = true
       } else {
-        console.log("REJECTED!")
-        console.log(JSON.stringify(result, null, 4))
+        resultDescription.value = `Your message was not delivered. This is probably not your fault so please wait a few minutes and try again. You can also email us directly at: ${toAddress}.`
+        resultSecondaryContent.value = 'Try Again'
+        resultStatus.value = 'error'
+        resultTitle.value = 'Failed To Send Message'
+        showResult.value = true
+        shouldClearInput.value = false
       }
       // TODO: Finish the error handling to address all cases
       if (status === 400 && result.message) {
@@ -129,7 +141,6 @@ const handleReturn = () => {
 
 const handleSendAnother = () => {
   showResult.value = false
-  shouldClearInput.value = true
 }
 
 const updateFormErrors = formErrors => {
@@ -195,13 +206,13 @@ const updateShouldClearInput = event => {
     >
       <n-result
         class="modal-result"
-        status="success"
-        title="Message Sent"
-        description="Thank you for contacting us. Your message was delivered. If you provided an email address, you can expect a response within 48 hours."
+        :description="resultDescription"
+        :status="resultStatus"
+        :title="resultTitle"
       >
         <template #footer>
           <n-button type="primary" @click="handleReturn">Return to {{ fromTitle }}</n-button>
-          <n-button type="text" @click="handleSendAnother">Send Another Message</n-button>
+          <n-button type="text" @click="handleSendAnother">{{ resultSecondaryContent }}</n-button>
         </template>
       </n-result>
     </n-modal>
